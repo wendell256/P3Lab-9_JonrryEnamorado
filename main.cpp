@@ -259,9 +259,7 @@ void ingresar(){
                 
               
                 
-                    for(int i=0;i<players.size();i++){
-                    players[i]->getCivilizacion()->restarTurno();
-                    }
+                    actual->getCivilizacion()->restarTurno();
                 
                 break;
             case 8:
@@ -272,9 +270,7 @@ void ingresar(){
                 if(recursos){
                     actual->getCivilizacion()->moreResources();
                 }
-                for(int i=0;i<players.size();i++){
-                    players[i]->getCivilizacion()->restarTurno();
-                    }
+                actual->getCivilizacion()->restarTurno();
                 
                 break;
             default:
