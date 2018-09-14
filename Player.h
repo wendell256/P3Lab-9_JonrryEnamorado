@@ -10,6 +10,7 @@ class Player{
     private:
         string name;
         Civilizacion* civ;
+        
     public:
         Player(string,Civilizacion*);
         string getName();

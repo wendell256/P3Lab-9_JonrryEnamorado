@@ -11,6 +11,7 @@ class Civilizacion{
     public:
         Civilizacion();
         Civilizacion(string,int,int,int,int,int,int);//name, oro, madera,piedra,alimento,pmax,pcapacidad
+        string getName();
         int getOro();
         void setOro(int);
         int getMadera();

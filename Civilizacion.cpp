@@ -1,4 +1,4 @@
-#include "civilizacion.h"
+#include "Civilizacion.h"
 
 Civilizacion::Civilizacion(string tname, int toro,int tmadera, int tpiedra, int talimento, int tpmax, int tpcapacidad){
     name = tname;
@@ -79,4 +79,8 @@ void Civilizacion::addPcapacidad(){
         cout<<"Has llegado al limite de poblacion";
     }
 
+}
+
+string Civilizacion::getName(){
+    return name;
 }

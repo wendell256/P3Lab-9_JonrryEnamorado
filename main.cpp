@@ -1,10 +1,20 @@
 #include "Civilizacion.h"
+#include "Player.h"
 #include <iostream>
 #include <string>
 #include <vector>
 
 using namespace std;
+/*COSAS PREDETERMINADAS
+    aldeanos = {alimentacion = 55} recoge = {+50 alimento;+40madera;+30 oro; +20 piedra}
+    soldado = {alimentacion = 90; oro = 25; ataque = 30; defensa = 15; vida = 100; velocidad = 50}
+    caballeria = {alimentacion = 110; oro = 60; defensa = 5; vida = 150; velocidad = 85}
+    guerro especial = {alimentacion = 150; oro = 90; vida = 300}
 
+    casa = {madera = 50}
+    cuartel = {madera = 120; piedra = 80}
+    castillo = {madera = 275; piedra = 200}
+*/
 //funciones
 int menuPrincipal();
 void crearCiv();
@@ -16,9 +26,11 @@ void nuevoEdificio();
 void nuevaTropa();
 void destierro();
 void fight();
-
+void listCivs();
 //variables globales
 vector<Civilizacion*> Civs;
+vector<Player*> players;
+Player* actual;
 
 int main(){
     char resp='s';
@@ -87,5 +99,31 @@ void crearCiv(){
 }
 
 void crearPlayer(){
+    string name;
+    Civilizacion* civ;
+    int sel;
+    cout<<"NUEVO JUGADOR"<<endl<<"Ingrese el nombre del nuevo jugador:"<<endl;
+    cin>>name;
+    listCivs();
+    cout<<"Seleccione Civilizacion para jugador:"<<endl;
+    cin>>sel;
+    while(sel<1 || sel>Civs.size()-1){
+        cout<<"ERROR seleccione de nuevo:"<<endl;
+        cin>>sel;
+    }
+    sel--;
+    civ = Civs[sel];
+
+    players.push_back(new Player(name,civ));
+    cout<<"NUEVO JUGADOR CREADO EXITOSAMENTE"<<endl;
+}
+
+void listCivs(){
+    for(int i=0;i<Civs.size();i++){
+        cout<<i+1<<") "<<Civs[0]->getName()<<endl;
+    }
+}
+
+void ingresar(){
 
 }
