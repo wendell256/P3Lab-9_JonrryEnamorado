@@ -303,7 +303,7 @@ void listEverything(Civilizacion* tmp){
 
 void fight(){
     bool batalla=false;
-    int sel,opc,gane=-1;
+    int sel,opc,opc2,gane=-1;
    
     cout<<"SELECCIONE JUGADOR ENEMIGO"<<endl;
     listPlayers();
@@ -344,8 +344,8 @@ void fight(){
                 cout<<enemy->getName()<< " selecciona tropa a mandar a batalla: "<<endl;
                 enemy->getCivilizacion()->contarTropas();
                 cout<<"1) Soldado"<<endl<<"2) Caballeria"<<endl<<"3) Guerrero Especial"<<endl<<"Ingrese opcion:"<<endl;
-                cin>>opc;
-                switch(opc){
+                cin>>opc2;
+                switch(opc2){
                     case 1:
                         enemyfight=enemy->getCivilizacion()->RestarSoldado();
 
@@ -361,13 +361,18 @@ void fight(){
                     }
             }
             if(enemyfight != NULL){
-                cout<<"BATALLA COMIENZA"<<endl;
+                cout<<"INICIO BATALLA"<<endl;
                 while(actualfight->getVida()>0 && enemyfight->getVida()>0){
                     cout<<enemy->getName()<<": "<<endl<<" ";
                     enemyfight->restarVida(actualfight->ataque(enemyfight->getVida()));
                     cout<<actual->getName()<<": "<<endl<<" ";
                     actualfight->restarVida(enemyfight->ataque(actualfight->getVida()));
-                    
+                    if(enemyfight->getVida()<=0){
+                        enemyfight= NULL;
+                    }
+                    if(actualfight->getVida()<=0){
+                        actualfight=NULL;
+                    }
                 }
                 batalla=true;
             }
