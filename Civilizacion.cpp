@@ -267,7 +267,7 @@ void Civilizacion::restarTurno(){
 
 void Civilizacion::inicio(){
     for(int i=0;i<queueAldeanos.size();i++){
-       if(queueAldeanos[i]->getTurno()==0){
+       if(queueAldeanos[i]->getTurno()<=0){
            cout<<"*Nuevo aldeano creado*"<<endl;
            AldeanosCreados.push_back(queueAldeanos[i]);
            queueAldeanos.erase(queueAldeanos.begin()+i);
@@ -275,7 +275,7 @@ void Civilizacion::inicio(){
        }
     }
     for(int i=0;i<queueEdificios.size();i++){
-        if(queueEdificios[i]->getTurno()==0){
+        if(queueEdificios[i]->getTurno()<=0){
            cout<<"*Nuevo edificio creado*"<<endl;
            EdificiosCreados.push_back(queueEdificios[i]);
            queueEdificios.erase(queueEdificios.begin()+i);
@@ -283,7 +283,7 @@ void Civilizacion::inicio(){
        }
     }
     for(int i=0;i<queueTropas.size();i++){
-       if(queueTropas[i]->getTurno()==0){
+       if(queueTropas[i]->getTurno()<=0){
            cout<<"*Nueva tropa creada*"<<endl;
            TropasCreadas.push_back(queueTropas[i]);
            queueTropas.erase(queueTropas.begin()+i);

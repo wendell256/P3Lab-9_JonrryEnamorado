@@ -43,6 +43,8 @@ vector<Player*> players;
 Player* actual;
 Player* enemy;
 int forzar,turno=0;
+Tropa* actualfight;
+Tropa* enemyfight;
 
 int main(){
     char resp='s';
@@ -165,6 +167,16 @@ void ingresar(){
     }
     sel--;
     actual = players[sel];
+    while(actual->turno=0){
+        cout<<"ERROR ya jugaste tu turno esta ronda elige otro:"<<endl;
+        cin>>sel;
+        while(sel<1 || sel>players.size()){
+            cout<<"ERROR seleccione de nuevo:"<<endl;
+            cin>>sel;
+        }
+        sel--;
+        actual = players[sel];
+    }
     cout<<endl;
     actual->getCivilizacion()->inicio();
     cout<<endl;
@@ -240,23 +252,45 @@ void ingresar(){
             case 7:
                 cout<<"Finalizando turno..."<<endl;
                 seguir=1;
+                actual->turno=0;
                 if(recursos){
                     actual->getCivilizacion()->moreResources();
                 }
-                actual->getCivilizacion()->restarTurno();
+                
+                actual->turno=0;
+                
+                    for(int i=0;i<players.size();i++){
+                    players[i]->getCivilizacion()->restarTurno();
+                    }
+                
                 break;
             case 8:
                 forzar=1;
                 cout<<"Finalizando turno..."<<endl;
+                actual->turno=0;
                 seguir=1;
                 if(recursos){
                     actual->getCivilizacion()->moreResources();
                 }
-                actual->getCivilizacion()->restarTurno();
+                for(int i=0;i<players.size();i++){
+                    players[i]->getCivilizacion()->restarTurno();
+                    }
                 
                 break;
             default:
             cout<<"ERROR"<<endl;
+        }
+    }
+    int tmp=0;
+    for(int i=0;i<players.size();i++){
+        tmp=0;
+            if(players[i]->turno==0){
+                tmp++;
+            }
+    }
+    if(tmp==0){
+        for(int i=0;i<players.size();i++){
+            players[i]->turno=1;
         }
     }
 }
@@ -271,8 +305,8 @@ void listEverything(Civilizacion* tmp){
 
 void fight(){
     int sel,opc,gane=-1;
-    Tropa* actualfight=NULL;
-    Tropa* enemyfight=NULL;
+    actualfight=NULL;
+    enemyfight=NULL;
     cout<<"SELECCIONE JUGADOR ENEMIGO"<<endl;
     listPlayers();
     cout<<"Seleccione una opcion: "<<endl;
@@ -351,11 +385,11 @@ void fight(){
 }
 
 int revisarGane(){
-    if(actual->getCivilizacion()->contarSoldados()==0 && actual->getCivilizacion()->contarCaballeria()==0 && actual->getCivilizacion()->contarGuerreros()==0){
+    if(actual->getCivilizacion()->contarSoldados()==0 && actual->getCivilizacion()->contarCaballeria()==0 && actual->getCivilizacion()->contarGuerreros()==0 &&actualfight->getVida()==0){
         cout<<"HA GANADO "<<enemy->getName();
         return 1;
     }
-    else if(enemy->getCivilizacion()->contarSoldados()==0 && enemy->getCivilizacion()->contarCaballeria()==0 && enemy->getCivilizacion()->contarGuerreros()==0){
+    else if(enemy->getCivilizacion()->contarSoldados()==0 && enemy->getCivilizacion()->contarCaballeria()==0 && enemy->getCivilizacion()->contarGuerreros()==0 &&enemyfight->getVida()==0){
         cout<<"HA GANADO "<<actual->getName();
         return 0;
     }
