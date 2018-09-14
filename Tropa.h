@@ -10,7 +10,9 @@ class Tropa{
         int calimentacion, coro, attack,defensa,vida,velocidad, tiempot;
     public:
         Tropa(string);
-        virtual int ataque(int);
+        virtual int ataque(int){};
+        int getTurno();
+        void setTurno(int);
 };
 
 #endif
