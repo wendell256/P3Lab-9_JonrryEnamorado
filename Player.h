@@ -19,10 +19,12 @@ using namespace std;
 class Player{
     private:
         string name;
+        int turno;
         Civilizacion* civ;
         
     public:
-        int turno=1;
+        int getTurno();
+        void setTurno(int);
         Player(string,Civilizacion*);
         string getName();
         Civilizacion* getCivilizacion();

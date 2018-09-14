@@ -167,8 +167,8 @@ void ingresar(){
     }
     sel--;
     actual = players[sel];
-    while(actual->turno=0){
-        cout<<"ERROR ya jugaste tu turno esta ronda elige otro:"<<endl;
+    while(actual->getTurno()==0){
+        cout<<"ERROR ya jugaste tu turno esta ronda elige otro player:"<<endl;
         cin>>sel;
         while(sel<1 || sel>players.size()){
             cout<<"ERROR seleccione de nuevo:"<<endl;
@@ -252,12 +252,12 @@ void ingresar(){
             case 7:
                 cout<<"Finalizando turno..."<<endl;
                 seguir=1;
-                actual->turno=0;
+                actual->setTurno(0);
                 if(recursos){
                     actual->getCivilizacion()->moreResources();
                 }
                 
-                actual->turno=0;
+              
                 
                     for(int i=0;i<players.size();i++){
                     players[i]->getCivilizacion()->restarTurno();
@@ -267,7 +267,7 @@ void ingresar(){
             case 8:
                 forzar=1;
                 cout<<"Finalizando turno..."<<endl;
-                actual->turno=0;
+                actual->setTurno(0);
                 seguir=1;
                 if(recursos){
                     actual->getCivilizacion()->moreResources();
@@ -283,14 +283,14 @@ void ingresar(){
     }
     int tmp=0;
     for(int i=0;i<players.size();i++){
-        tmp=0;
-            if(players[i]->turno==0){
+        
+            if(players[i]->getTurno()!=0){
                 tmp++;
             }
     }
     if(tmp==0){
         for(int i=0;i<players.size();i++){
-            players[i]->turno=1;
+            players[i]->setTurno(1);
         }
     }
 }
