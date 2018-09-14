@@ -12,6 +12,7 @@ class Aldeano{
         Aldeano(string);
         int getTurno();
         void setTurno(int);
+        ~Aldeano(){};
 };
 
 #endif

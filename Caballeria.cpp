@@ -14,3 +14,4 @@ int Caballeria::ataque(int enemigo){
     //attack especial
     return attack + velocidad/2;
 }
+

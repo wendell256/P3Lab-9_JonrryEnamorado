@@ -13,3 +13,7 @@ int Edificio::getTurno(){
 void Edificio::setTurno(int tturno){
     tiempot=tturno;
 }
+
+Edificio::~Edificio(){
+    cout<<"Edificio Eliminado"<<endl;;
+}

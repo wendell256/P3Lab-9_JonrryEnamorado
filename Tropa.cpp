@@ -11,3 +11,22 @@ int Tropa::getTurno(){
 void Tropa::setTurno(int tturno){
     tiempot=tturno;
 }
+
+void Tropa::restarVida(int ataque){
+    vida-=ataque;
+    cout<<"TU TROPA HA PERDIDO"<<ataque<<" DE VIDA. Vida restante: ";
+    if (vida>0){
+        cout<<vida<<endl;
+    } 
+    else{
+        cout<<0<<endl;
+    }
+}
+
+int Tropa::getVida(){
+    return vida;
+}
+
+Tropa::~Tropa(){
+    cout<<"Tropa eliminada"<<endl;
+}

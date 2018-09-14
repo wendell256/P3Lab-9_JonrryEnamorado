@@ -23,14 +23,15 @@ class Civilizacion{
         vector<Edificio*> queueEdificios;
         vector<Tropa*> queueTropas;
         vector<Aldeano*> queueAldeanos;
+        bool cuartel=false;
         vector<Edificio*> EdificiosCreados;
-        
         vector<Tropa*> TropasCreadas;
         vector<Aldeano*> AldeanosCreados;
     public:
         Civilizacion();
         Civilizacion(string,int,int,int,int,int,int);//name, oro, madera,piedra,alimento,pmax,pcapacidad
         string getName();
+        bool getCuartel();
         int getOro();
         void setOro(int);
         int getMadera();
@@ -60,6 +61,13 @@ class Civilizacion{
         void restarTurno();
         void destierro();
         void inicio();
+        Tropa* RestarSoldado();
+        Tropa* RestarCaballeria();
+        Tropa* RestarGuerreroEspecial();
+        int contarSoldados();
+        int contarCaballeria();
+        int contarGuerreros();
+        ~Civilizacion();
 };
 
 #endif

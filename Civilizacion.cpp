@@ -76,7 +76,7 @@ void Civilizacion::addPcapacidad(){
     pcapacidad+=5;
     if(pcapacidad>=pmax){
         pcapacidad = pmax;
-        cout<<"Has llegado al limite de poblacion";
+        cout<<"Has llegado al limite de poblacion"<<endl;
     }
 
 }
@@ -89,11 +89,11 @@ bool Civilizacion::crearAldeano(string sex){
     if(alimento>=55 && pactual<pcapacidad){
         alimento-=55;
         queueAldeanos.push_back(new Aldeano(sex));
-        cout<<"Aldeano creado exitosamente!"<<endl;
+        cout<<"*Aldeano añadido a queue exitosamente!*"<<endl;
         pactual++;
         return true;
     }else{
-        cout<<"No es posible!"<<endl;
+        cout<<"*No es posible!*"<<endl;
         return false;
     }
 
@@ -105,13 +105,13 @@ bool Civilizacion::crearSoldado(string sex){
         oro-=25;
        
         queueTropas.push_back(new Soldado(sex));
-        cout<<"Soldado añadido a queue exitosamente!"<<endl;
+        cout<<"*Soldado añadido a queue exitosamente!*"<<endl;
         pactual++;
         
         return true;
     }
     else{
-        cout<<"No es posible!"<<endl;
+        cout<<"*No es posible!*"<<endl;
        
         return false;
     }
@@ -122,12 +122,12 @@ bool Civilizacion::crearCaballeria(string sex){
         alimento-=110;
         oro-=60;
         queueTropas.push_back(new Caballeria(sex));
-        cout<<"Caballeria añadido a queue exitosamente!"<<endl;
+        cout<<"*Caballeria añadido a queue exitosamente!*"<<endl;
         pactual++;
         return true;
     }
     else{
-        cout<<"No es posible!"<<endl;
+        cout<<"*No es posible!*"<<endl;
         return false;
     }
 }
@@ -137,12 +137,12 @@ bool Civilizacion::crearGuerreroEspecial(string sex){
         alimento-=150;
         oro-=90;
         queueTropas.push_back(new GuerreroEspecial(sex));
-        cout<<"Guerrero Especial añadido a queue exitosamente!"<<endl;
+        cout<<"*Guerrero Especial añadido a queue exitosamente!*"<<endl;
         pactual++;
         return true;
     }
     else{
-        cout<<"No es posible!"<<endl;
+        cout<<"*No es posible!*"<<endl;
         return false;
     }
 }
@@ -151,7 +151,7 @@ bool Civilizacion::crearCasa(){
     if(madera>=50){
         madera-=50;
         queueEdificios.push_back(new Casa());
-        cout<<"Casa añadido a queue exitosamente!"<<endl;
+        cout<<"*Casa añadido a queue exitosamente!*"<<endl;
         addPcapacidad();
         
         return true;
@@ -159,7 +159,7 @@ bool Civilizacion::crearCasa(){
     }
     else
     {
-        cout<<"No tienes suficiente recursos!"<<endl;
+        cout<<"*No tienes suficiente recursos!*"<<endl;
         return false;
     }
 }
@@ -169,14 +169,14 @@ bool Civilizacion::crearCuartel(){
         madera-=120;
         piedra-=80;
         queueEdificios.push_back(new Cuartel());
-        cout<<"Cuartel añadido a queue exitosamente!"<<endl;
-        
+        cout<<"*Cuartel añadido a queue exitosamente!*"<<endl;
+        cuartel=true;
         return true;
 
     }
     else
     {
-        cout<<"No tienes suficiente recursos!"<<endl;
+        cout<<"*No tienes suficiente recursos!*"<<endl;
         return false;
     }
 }
@@ -186,14 +186,14 @@ bool Civilizacion::crearCastillo(){
         madera-=275;
         piedra-=200;
         queueEdificios.push_back(new Castillo());
-        cout<<"Cuartel añadido a queue exitosamente!"<<endl;
+        cout<<"*Cuartel añadido a queue exitosamente!*"<<endl;
        
         return true;
 
     }
     else
     {
-        cout<<"No tienes suficiente recursos!"<<endl;
+        cout<<"*No tienes suficiente recursos!*"<<endl;
         return false;
     }
 }
@@ -203,6 +203,8 @@ void Civilizacion::moreResources(){
     alimento+=50*numAldeanos;
     oro+= 30*numAldeanos;
     piedra+= 20*numAldeanos;
+    madera+= 40*numAldeanos;
+
 }
 
 void Civilizacion::contarAldeanos(){
@@ -262,29 +264,27 @@ void Civilizacion::restarTurno(){
 void Civilizacion::inicio(){
     for(int i=0;i<queueAldeanos.size();i++){
        if(queueAldeanos[i]->getTurno()==0){
-           cout<<"Nuevo aldeano creado"<<endl;
+           cout<<"*Nuevo aldeano creado*"<<endl;
            AldeanosCreados.push_back(queueAldeanos[i]);
-           Aldeano* tmp = queueAldeanos[i];
-           delete tmp;
+           queueAldeanos.erase(queueAldeanos.begin()+i);
        }
     }
     for(int i=0;i<queueEdificios.size();i++){
         if(queueEdificios[i]->getTurno()==0){
-           cout<<"Nuevo edificio creado"<<endl;
+           cout<<"*Nuevo edificio creado*"<<endl;
            EdificiosCreados.push_back(queueEdificios[i]);
-           Edificio* tmp = queueEdificios[i];
-           delete tmp;
+           queueEdificios.erase(queueEdificios.begin()+i);
        }
     }
     for(int i=0;i<queueTropas.size();i++){
        if(queueTropas[i]->getTurno()==0){
-           cout<<"Nueva tropa creada"<<endl;
+           cout<<"*Nueva tropa creada*"<<endl;
            TropasCreadas.push_back(queueTropas[i]);
-           Tropa* tmp = queueTropas[i];
-           delete tmp;
+           queueTropas.erase(queueTropas.begin()+i);
        }
     }
 }
+
 void Civilizacion::destierro(){
     queueAldeanos.clear();
     queueEdificios.clear();
@@ -300,3 +300,109 @@ void Civilizacion::destierro(){
     madera=0;
 }
 
+Tropa* Civilizacion::RestarSoldado(){
+    int soldado=0;
+    for(int i=0;i<TropasCreadas.size();i++){
+        Soldado* tmp_s = dynamic_cast<Soldado*>(TropasCreadas[i]);
+        if(tmp_s!=NULL){
+            soldado++;
+            TropasCreadas.erase(TropasCreadas.begin()+i);
+            return tmp_s;
+        }
+    }
+    if(soldado==0){
+        cout<<"*ERROR no tienes mas soldados*";
+        return NULL;
+    }
+}
+
+int Civilizacion::contarSoldados(){
+    int soldado=0;
+    for(int i=0;i<TropasCreadas.size();i++){
+        Soldado* tmp_s = dynamic_cast<Soldado*>(TropasCreadas[i]);
+        if(tmp_s!=NULL){
+            soldado++;
+        }
+    }
+    return soldado;
+}
+
+Tropa* Civilizacion::RestarCaballeria(){
+    int caballeria=0;
+    for(int i=0;i<TropasCreadas.size();i++){
+        Caballeria* tmp_s = dynamic_cast<Caballeria*>(TropasCreadas[i]);
+        if(tmp_s!=NULL){
+            caballeria++;
+            TropasCreadas.erase(TropasCreadas.begin()+i);
+            return tmp_s;
+        }
+    }
+    if(caballeria==0){
+        cout<<"*ERROR no tienes mas Caballeria*";
+        return NULL;
+    }
+}
+
+int Civilizacion::contarCaballeria(){
+    int cont=0;
+    for(int i=0;i<TropasCreadas.size();i++){
+        Caballeria* tmp_s = dynamic_cast<Caballeria*>(TropasCreadas[i]);
+        if(tmp_s!=NULL){
+            cont++;
+        }
+    }
+    return cont;
+}
+
+Tropa* Civilizacion::RestarGuerreroEspecial(){
+    int guerrero=0;
+    for(int i=0;i<TropasCreadas.size();i++){
+        GuerreroEspecial* tmp_s = dynamic_cast<GuerreroEspecial*>(TropasCreadas[i]);
+        if(tmp_s!=NULL){
+            guerrero++;
+            TropasCreadas.erase(TropasCreadas.begin()+i);
+            return tmp_s;
+        }
+    }
+    if(guerrero==0){
+        cout<<"*ERROR no tienes mas Caballeria*";
+        return NULL;
+    }
+}
+
+int Civilizacion::contarGuerreros(){
+    int cont=0;
+    for(int i=0;i<TropasCreadas.size();i++){
+        GuerreroEspecial* tmp_s = dynamic_cast<GuerreroEspecial*>(TropasCreadas[i]);
+        if(tmp_s!=NULL){
+            cont++;
+        }
+    }
+    return cont;
+}
+
+//destructor
+Civilizacion::~Civilizacion(){
+    for(int i=0;i<queueAldeanos.size();i++){
+        delete queueAldeanos[i];
+    }
+    for(int i=0;i<queueEdificios.size();i++){
+        delete queueEdificios[i];
+    }
+    for(int i=0;i<queueTropas.size();i++){
+        delete queueTropas[i];
+    }
+    for(int i=0;i<AldeanosCreados.size();i++){
+        delete AldeanosCreados[i];
+    }
+    for(int i=0;i<EdificiosCreados.size();i++){
+        delete EdificiosCreados[i];
+    }
+    for(int i=0;i<TropasCreadas.size();i++){
+        delete TropasCreadas[i];
+    }
+}
+
+bool Civilizacion::getCuartel(){
+    return cuartel;
+}

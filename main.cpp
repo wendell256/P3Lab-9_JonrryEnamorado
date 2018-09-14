@@ -34,11 +34,14 @@ void fight();
 void listCivs();
 void listPlayers();
 void listEverything(Civilizacion*);
+int revisarGane();
+void destructores();
 
 //variables globales
 vector<Civilizacion*> Civs;
 vector<Player*> players;
 Player* actual;
+Player* enemy;
 int forzar;
 
 int main(){
@@ -75,12 +78,13 @@ int main(){
         cin>>resp;
 
     }
+    destructores();
 }
 
 int menuPrincipal(){
     int seleccion;
-    cout<<endl<<"AGE OF EMPIRE II"<<endl<<endl<<"1) Crear Civilización"<<endl<<"2) Crear Jugador"
-        <<"3) Guardar Información"<<endl<<"4) Ingresar"<<endl<<"5) FINALIZAR"<<"Ingrese una opcion: "<<endl;
+    cout<<endl<<"AGE OF EMPIRE II"<<endl<<endl<<"1) Crear Civilización"<<endl<<"2) Crear Jugador"<<endl
+        <<"3) Guardar Información"<<endl<<"4) Ingresar"<<endl<<"5) FINALIZAR"<<endl<<"Ingrese una opcion: "<<endl;
     cin>>seleccion;
     while(seleccion<1 || seleccion>4){
         cout<<"ERROR seleccione una opcion valida:"<<endl;
@@ -96,6 +100,8 @@ void crearCiv(){
     cin>>name;
     cout<<name<<" empieza con esta cantidad de oro:"<<endl;
     cin>>oro;
+    cout<<name<<" empieza con esta cantidad de alimento:"<<endl;
+    cin>>alimento;
     cout<<name<<" empieza con esta cantidad de madera:"<<endl;
     cin>>madera;
     cout<<name<<" empieza con esta cantidad de piedra:"<<endl;
@@ -115,10 +121,11 @@ void crearPlayer(){
     int sel;
     cout<<"NUEVO JUGADOR"<<endl<<"Ingrese el nombre del nuevo jugador:"<<endl;
     cin>>name;
+    cout<<endl<<"*Seleccionar civilizacion*"<<endl;
     listCivs();
     cout<<"Seleccione Civilizacion para jugador:"<<endl;
     cin>>sel;
-    while(sel<1 || sel>Civs.size()-1){
+    while(sel<1 || sel>Civs.size()){
         cout<<"ERROR seleccione de nuevo:"<<endl;
         cin>>sel;
     }
@@ -142,7 +149,7 @@ void listPlayers(){
 }
 
 void ingresar(){
-    int sel,opc,opc2;
+    int sel,opc,opc2,seguir=0;
     bool recursos=false;
     string sex;
     cout<<"SELECCIONE JUGADOR"<<endl;
@@ -153,77 +160,86 @@ void ingresar(){
         cout<<"ERROR seleccione de nuevo:"<<endl;
         cin>>sel;
     }
+    sel--;
     actual = players[sel];
     actual->getCivilizacion()->inicio();
     listEverything(actual->getCivilizacion());
-
-    cout<<"Que deseas hacer en este turno?"<<endl<<"1) Nuevo aldeano"<<endl<<"2) Buscar Recursos"<<endl<<"3) Nuevo Edificio"<<endl
-        <<"4) Nueva Tropa"<<endl<<"5) Desterrar poblacion"<<endl<<"6) Batalla"<<endl<<"7) Finalizar Turno"<<"8) Volver a menu principal"<<endl<<"Seleccione una opcion:"<<endl;
-    cin>>opc;
-    switch(opc){
-        case 1:
-            cout<<"Ingrese sexo:"<<endl;
-            cin>>sex;
-            actual->getCivilizacion()->crearAldeano(sex);
-            break;
-        case 2:
-            recursos = true;
-            break;
-        case 3: 
-            cout<<"1) Casa"<<endl<<"2) Cuartel"<<"3) Castillo"<<endl<<"INgrese opcion:"<<endl;
-            cin>>opc2;
-            switch(opc2){
-                case 1:
-                    actual->getCivilizacion()->crearCasa();
-                    break;
-                case 2:
-                    actual->getCivilizacion()->crearCuartel();
-                    break;
-                case 3:
-                    actual->getCivilizacion()->crearCastillo();
-                    break;
-                default:
-                    cout<<"ERROR"<<endl;
-            }
-            break;
-        case 4:
-            cout<<"Sexo de nueva tropa:"<<endl;
-            cin>>sex;
-            cout<<"1) Soldado"<<endl<<"2) Caballeria"<<"3) Guerrero Especial"<<endl<<"Ingrese opcion:"<<endl;
-            cin>>opc2;
-            switch(opc2){
-                case 1:
-                    actual->getCivilizacion()->crearSoldado(sex);
-                    break;
-                case 2:
-                    actual->getCivilizacion()->crearCaballeria(sex);
-                    break;
-                case 3:
-                    actual->getCivilizacion()->crearGuerreroEspecial(sex);
-                    break;
-                default:
-                    cout<<"ERROR"<<endl;
-            }
-            break;
-        case 5:
-            actual->getCivilizacion()->destierro();
-            cout<<"DESTIERRO EXITOSO!"<<endl;
-            break;
-        case 6:
-            fight();
-            break;
-        case 7:
-            cout<<"Finalizando turno..."<<endl;
-            if(recursos){
-                actual->getCivilizacion()->moreResources();
-            }
-            actual->getCivilizacion()->restarTurno();
-            break;
-        case 8:
-            forzar=1;
-            break;
-        default:
-        cout<<"ERROR"<<endl;
+    while(seguir==0){
+        cout<<"Que deseas hacer en este turno?"<<endl<<"1) Nuevo aldeano"<<endl<<"2) Buscar Recursos"<<endl<<"3) Nuevo Edificio"<<endl
+            <<"4) Nueva Tropa"<<endl<<"5) Desterrar poblacion"<<endl<<"6) Batalla"<<endl<<"7) Finalizar Turno"<<endl<<"8) Volver a menu principal"<<endl<<"Seleccione una opcion:"<<endl;
+        cin>>opc;
+        switch(opc){
+            case 1:
+                cout<<"Ingrese sexo:"<<endl;
+                cin>>sex;
+                actual->getCivilizacion()->crearAldeano(sex);
+                break;
+            case 2:
+                recursos = true;
+                cout<<"*Has enviado a todos tus recolectores a recoger, eso es si tienes aldeanos...*"<<endl;
+                break;
+            case 3: 
+                cout<<"1) Casa"<<endl<<"2) Cuartel"<<endl<<"3) Castillo"<<endl<<"Ingrese opcion:"<<endl;
+                cin>>opc2;
+                switch(opc2){
+                    case 1:
+                        actual->getCivilizacion()->crearCasa();
+                        break;
+                    case 2:
+                        actual->getCivilizacion()->crearCuartel();
+                        break;
+                    case 3:
+                        actual->getCivilizacion()->crearCastillo();
+                        break;
+                    default:
+                        cout<<"ERROR"<<endl;
+                }
+                break;
+            case 4:
+                if(actual->getCivilizacion()->getCuartel()){
+                    cout<<"Sexo de nueva tropa:"<<endl;
+                    cin>>sex;
+                    cout<<"1) Soldado"<<endl<<"2) Caballeria"<<"3) Guerrero Especial"<<endl<<"Ingrese opcion:"<<endl;
+                    cin>>opc2;
+                    switch(opc2){
+                        case 1:
+                            actual->getCivilizacion()->crearSoldado(sex);
+                            break;
+                        case 2:
+                            actual->getCivilizacion()->crearCaballeria(sex);
+                            break;
+                        case 3:
+                            actual->getCivilizacion()->crearGuerreroEspecial(sex);
+                            break;
+                        default:
+                            cout<<"ERROR"<<endl;
+                    }
+                }
+                else{
+                    cout<<"**NO TIENES CUARTEL**"<<endl;
+                }
+                break;
+            case 5:
+                actual->getCivilizacion()->destierro();
+                cout<<"DESTIERRO EXITOSO!"<<endl;
+                break;
+            case 6:
+                fight();
+                break;
+            case 7:
+                cout<<"Finalizando turno..."<<endl;
+                seguir=1;
+                if(recursos){
+                    actual->getCivilizacion()->moreResources();
+                }
+                actual->getCivilizacion()->restarTurno();
+                break;
+            case 8:
+                forzar=1;
+                break;
+            default:
+            cout<<"ERROR"<<endl;
+        }
     }
 }
 
@@ -236,5 +252,102 @@ void listEverything(Civilizacion* tmp){
 }
 
 void fight(){
+    int sel,opc,gane=-1;
+    Tropa* actualfight=NULL;
+    Tropa* enemyfight=NULL;
+    cout<<"SELECCIONE JUGADOR ENEMIGO"<<endl;
+    listPlayers();
+    cout<<"Seleccione una opcion: "<<endl;
+    cin>>sel;
+    while(sel<1 || sel>players.size()){
+        cout<<"ERROR seleccione de nuevo:"<<endl;
+        cin>>sel;
+    }
+    enemy = players[sel];
+    if(actual->getName()==enemy->getName()){
+        cout<<"ES UNA GUERRA CIVIL";
+    }
+    while(gane<0){
+        actualfight=NULL;
+        enemyfight=NULL;
+        cout<<actual->getName()<< " selecciona tropa a mandar a batalla: "<<endl;
+        actual->getCivilizacion()->contarTropas();
+        cout<<"1) Soldado"<<endl<<"2) Caballeria"<<"3) Guerrero Especial"<<endl<<"Ingrese opcion:"<<endl;
+        cin>>opc;
+        switch(opc){
+            case 1:
+                actualfight=actual->getCivilizacion()->RestarSoldado();
 
+                break;
+            case 2:
+                actualfight=actual->getCivilizacion()->RestarCaballeria();
+                break;
+            case 3:
+                actualfight=actual->getCivilizacion()->RestarGuerreroEspecial();
+                break;
+            default:
+                cout<<"ERROR"<<endl;
+        }
+            if(actualfight != NULL){
+                cout<<enemy->getName()<< " selecciona tropa a mandar a batalla: "<<endl;
+                enemy->getCivilizacion()->contarTropas();
+                cout<<"1) Soldado"<<endl<<"2) Caballeria"<<"3) Guerrero Especial"<<endl<<"Ingrese opcion:"<<endl;
+                cin>>opc;
+                switch(opc){
+                        case 1:
+                            enemyfight=enemy->getCivilizacion()->RestarSoldado();
+
+                            break;
+                        case 2:
+                            enemyfight=enemy->getCivilizacion()->RestarCaballeria();
+                            break;
+                        case 3:
+                            enemyfight=enemy->getCivilizacion()->RestarGuerreroEspecial();
+                            break;
+                        default:
+                            cout<<"ERROR"<<endl;
+                }
+                if(enemyfight != NULL){
+                    cout<<"BATALLA COMIENZA";
+                    while(actualfight->getVida()>0 && enemyfight->getVida()>0){
+                        cout<<enemy->getName()<<": "<<endl<<" ";
+                        enemyfight->restarVida(actualfight->ataque(enemyfight->getVida()));
+                        cout<<actual->getName()<<": "<<endl<<" ";
+                        actualfight->restarVida(enemyfight->ataque(actualfight->getVida()));
+                    }
+                }
+                else{
+                    cout<<"error no se pudo inicializar"<<endl;
+                }
+            }else{
+                cout<<"error no se pudo inicializar"<<endl;
+            }
+        gane=revisarGane();
+    }
+
+}
+
+int revisarGane(){
+    if(actual->getCivilizacion()->contarSoldados()==0 && actual->getCivilizacion()->contarCaballeria()==0 && actual->getCivilizacion()->contarGuerreros()==0){
+        cout<<"HA GANADO "<<enemy->getName();
+        return 1;
+    }
+    else if(enemy->getCivilizacion()->contarSoldados()==0 && enemy->getCivilizacion()->contarCaballeria()==0 && enemy->getCivilizacion()->contarGuerreros()==0){
+        cout<<"HA GANADO "<<actual->getName();
+        return 0;
+    }
+    else{
+        return -1;
+    }
+}
+
+void destructores(){
+    delete actual;
+    delete enemy;
+    for(int i=0;i<Civs.size();i++){
+        delete Civs[i];
+    }
+    for(int i=0;i<players.size();i++){
+        delete players[i];
+    }
 }

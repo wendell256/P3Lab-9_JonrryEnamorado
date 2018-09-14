@@ -2,6 +2,7 @@
 #define TROPA_H
 
 #include <string>
+#include <iostream>
 using namespace std;
 
 class Tropa{
@@ -12,7 +13,10 @@ class Tropa{
         Tropa(string);
         virtual int ataque(int){};
         int getTurno();
+        int getVida();
         void setTurno(int);
+        void restarVida(int);
+        ~Tropa();
 };
 
 #endif
