@@ -47,6 +47,8 @@ Tropa* actualfight;
 Tropa* enemyfight;
 
 int main(){
+    actualfight=NULL;
+    enemyfight=NULL;
     char resp='s';
     int seleccion;
     int forzar=0;
@@ -300,9 +302,9 @@ void listEverything(Civilizacion* tmp){
 }
 
 void fight(){
+    bool batalla=false;
     int sel,opc,gane=-1;
-    actualfight=NULL;
-    enemyfight=NULL;
+   
     cout<<"SELECCIONE JUGADOR ENEMIGO"<<endl;
     listPlayers();
     cout<<"Seleccione una opcion: "<<endl;
@@ -337,43 +339,47 @@ void fight(){
                     cout<<"ERROR"<<endl;
             }
         }
-            if(actualfight != NULL){
-                if(enemyfight == NULL){
-                    cout<<enemy->getName()<< " selecciona tropa a mandar a batalla: "<<endl;
-                    enemy->getCivilizacion()->contarTropas();
-                    cout<<"1) Soldado"<<endl<<"2) Caballeria"<<endl<<"3) Guerrero Especial"<<endl<<"Ingrese opcion:"<<endl;
-                    cin>>opc;
-                    switch(opc){
-                        case 1:
-                            enemyfight=enemy->getCivilizacion()->RestarSoldado();
+        if(actualfight != NULL){
+            if(enemyfight == NULL){
+                cout<<enemy->getName()<< " selecciona tropa a mandar a batalla: "<<endl;
+                enemy->getCivilizacion()->contarTropas();
+                cout<<"1) Soldado"<<endl<<"2) Caballeria"<<endl<<"3) Guerrero Especial"<<endl<<"Ingrese opcion:"<<endl;
+                cin>>opc;
+                switch(opc){
+                    case 1:
+                        enemyfight=enemy->getCivilizacion()->RestarSoldado();
 
-                            break;
-                        case 2:
-                            enemyfight=enemy->getCivilizacion()->RestarCaballeria();
-                            break;
-                        case 3:
-                            enemyfight=enemy->getCivilizacion()->RestarGuerreroEspecial();
-                            break;
-                        default:
-                            cout<<"ERROR"<<endl;
+                        break;
+                    case 2:
+                        enemyfight=enemy->getCivilizacion()->RestarCaballeria();
+                        break;
+                    case 3:
+                        enemyfight=enemy->getCivilizacion()->RestarGuerreroEspecial();
+                        break;
+                    default:
+                        cout<<"ERROR"<<endl;
                     }
+            }
+            if(enemyfight != NULL){
+                cout<<"BATALLA COMIENZA"<<endl;
+                while(actualfight->getVida()>0 && enemyfight->getVida()>0){
+                    cout<<enemy->getName()<<": "<<endl<<" ";
+                    enemyfight->restarVida(actualfight->ataque(enemyfight->getVida()));
+                    cout<<actual->getName()<<": "<<endl<<" ";
+                    actualfight->restarVida(enemyfight->ataque(actualfight->getVida()));
+                    
                 }
-                if(enemyfight != NULL){
-                    cout<<"BATALLA COMIENZA"<<endl;
-                    while(actualfight->getVida()>0 && enemyfight->getVida()>0){
-                        cout<<enemy->getName()<<": "<<endl<<" ";
-                        enemyfight->restarVida(actualfight->ataque(enemyfight->getVida()));
-                        cout<<actual->getName()<<": "<<endl<<" ";
-                        actualfight->restarVida(enemyfight->ataque(actualfight->getVida()));
-                    }
-                }
-                else{
-                    cout<<"error no se pudo inicializar"<<endl;
-                }
-            }else{
+                batalla=true;
+            }
+            else{
                 cout<<"error no se pudo inicializar"<<endl;
             }
-        gane=revisarGane();
+        }else{
+                cout<<"error no se pudo inicializar"<<endl;
+            }
+        if(batalla){
+            gane=revisarGane();
+        }
     }
 
 }
