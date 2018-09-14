@@ -321,8 +321,6 @@ void fight(){
         cout<<"ES UNA GUERRA CIVIL";
     }
     while(gane<0){
-        actualfight=NULL;
-        enemyfight=NULL;
         if(actualfight==NULL){
             cout<<actual->getName()<< " selecciona tropa a mandar a batalla: "<<endl;
             actual->getCivilizacion()->contarTropas();
