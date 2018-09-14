@@ -339,7 +339,7 @@ void fight(){
                     cout<<"ERROR"<<endl;
             }
         }
-        if(actualfight != NULL){
+        if(actualfight != NULL || actualfight->getVida()==0){
             if(enemyfight == NULL){
                 cout<<enemy->getName()<< " selecciona tropa a mandar a batalla: "<<endl;
                 enemy->getCivilizacion()->contarTropas();
@@ -360,19 +360,14 @@ void fight(){
                         cout<<"ERROR"<<endl;
                     }
             }
-            if(enemyfight != NULL){
+            if(enemyfight != NULL || enemyfight->getVida()==0){
                 cout<<"INICIO BATALLA"<<endl;
                 while(actualfight->getVida()>0 && enemyfight->getVida()>0){
                     cout<<enemy->getName()<<": "<<endl<<" ";
                     enemyfight->restarVida(actualfight->ataque(enemyfight->getVida()));
                     cout<<actual->getName()<<": "<<endl<<" ";
                     actualfight->restarVida(enemyfight->ataque(actualfight->getVida()));
-                    if(enemyfight->getVida()<=0){
-                        enemyfight= NULL;
-                    }
-                    if(actualfight->getVida()<=0){
-                        actualfight=NULL;
-                    }
+                    
                 }
                 batalla=true;
             }
