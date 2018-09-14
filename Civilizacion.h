@@ -1,6 +1,6 @@
 #ifndef CIVILIZACION_H
 #define CIVILIZACION_H
-
+#include <iostream>
 #include <string>
 using namespace std;
 
@@ -25,7 +25,7 @@ class Civilizacion{
         void setPactual(int);
         int getPcapacidad();
         void setPcapacidad(int);
-
+        void addPcapacidad();
 };
 
 #endif

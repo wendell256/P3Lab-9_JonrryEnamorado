@@ -43,3 +43,40 @@ void Civilizacion::setMadera(int tmadera){
 int Civilizacion::getPiedra(){
     return piedra;
 }
+
+void Civilizacion::setPiedra(int tpiedra){
+    piedra=tpiedra;
+}
+
+int Civilizacion::getPmax(){
+    return pmax;
+}
+
+void Civilizacion::setPmax(int tpmax){
+    pmax=tpmax;
+}
+
+int Civilizacion::getPactual(){
+    return pactual;
+}
+
+void Civilizacion::setPactual(int tpmax){
+    pmax=tpmax;
+}
+
+int Civilizacion::getPcapacidad(){
+    return pcapacidad;
+}
+
+void Civilizacion::setPcapacidad(int tpcapacidad){
+    pcapacidad=tpcapacidad;
+}
+
+void Civilizacion::addPcapacidad(){
+    pcapacidad+=5;
+    if(pcapacidad>=pmax){
+        pcapacidad = pmax;
+        cout<<"Has llegado al limite de poblacion";
+    }
+
+}
