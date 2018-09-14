@@ -2,6 +2,7 @@
 #define ALDEANO_H
 
 #include <string>
+#include <iostream>
 using namespace std;
 
 class Aldeano{
@@ -12,7 +13,7 @@ class Aldeano{
         Aldeano(string);
         int getTurno();
         void setTurno(int);
-        ~Aldeano(){};
+        ~Aldeano(){cout<<"Aldeano Eliminado"<<endl;};
 };
 
 #endif

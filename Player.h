@@ -20,7 +20,9 @@ class Player{
     private:
         string name;
         Civilizacion* civ;
+        
     public:
+        int turno=1;
         Player(string,Civilizacion*);
         string getName();
         Civilizacion* getCivilizacion();

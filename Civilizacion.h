@@ -19,11 +19,11 @@ using namespace std;
 class Civilizacion{
     protected:
         string name;
-        int oro, madera,piedra,alimento,pmax,pactual,pcapacidad;
+        int oro, madera,piedra,alimento,pmax,pactual,pcapacidad,pglobal;
         vector<Edificio*> queueEdificios;
         vector<Tropa*> queueTropas;
         vector<Aldeano*> queueAldeanos;
-        bool cuartel=false;
+        bool cuartel=false,castillo=false;
         vector<Edificio*> EdificiosCreados;
         vector<Tropa*> TropasCreadas;
         vector<Aldeano*> AldeanosCreados;
@@ -32,6 +32,7 @@ class Civilizacion{
         Civilizacion(string,int,int,int,int,int,int);//name, oro, madera,piedra,alimento,pmax,pcapacidad
         string getName();
         bool getCuartel();
+        bool getCastillo();
         int getOro();
         void setOro(int);
         int getMadera();

@@ -8,7 +8,7 @@ Civilizacion::Civilizacion(string tname, int toro,int tmadera, int tpiedra, int 
     alimento = talimento;
     pmax = tpmax;
     pcapacidad = tpcapacidad;
-
+    pglobal = pcapacidad;
     pactual=0;
 }
 
@@ -170,7 +170,7 @@ bool Civilizacion::crearCuartel(){
         piedra-=80;
         queueEdificios.push_back(new Cuartel());
         cout<<"*Cuartel añadido a queue exitosamente!*"<<endl;
-        cuartel=true;
+        
         return true;
 
     }
@@ -186,8 +186,8 @@ bool Civilizacion::crearCastillo(){
         madera-=275;
         piedra-=200;
         queueEdificios.push_back(new Castillo());
-        cout<<"*Cuartel añadido a queue exitosamente!*"<<endl;
-       
+        cout<<"*Castillo añadido a queue exitosamente!*"<<endl;
+        
         return true;
 
     }
@@ -246,6 +246,10 @@ void Civilizacion::contarEdificios(){
             castillos++;
         }
     }
+    if(cuarteles > 0)
+        cuartel=true;
+    if(castillos > 0)
+        castillo = true;
     cout<<"Casas: "<<casas<<endl<<"Cuarteles: "<<cuarteles<<endl<<"Castillos:"<<castillos<<endl;
 }
 
@@ -267,6 +271,7 @@ void Civilizacion::inicio(){
            cout<<"*Nuevo aldeano creado*"<<endl;
            AldeanosCreados.push_back(queueAldeanos[i]);
            queueAldeanos.erase(queueAldeanos.begin()+i);
+           i--;
        }
     }
     for(int i=0;i<queueEdificios.size();i++){
@@ -274,6 +279,7 @@ void Civilizacion::inicio(){
            cout<<"*Nuevo edificio creado*"<<endl;
            EdificiosCreados.push_back(queueEdificios[i]);
            queueEdificios.erase(queueEdificios.begin()+i);
+           i--;
        }
     }
     for(int i=0;i<queueTropas.size();i++){
@@ -281,11 +287,31 @@ void Civilizacion::inicio(){
            cout<<"*Nueva tropa creada*"<<endl;
            TropasCreadas.push_back(queueTropas[i]);
            queueTropas.erase(queueTropas.begin()+i);
+           i--;
        }
     }
 }
 
 void Civilizacion::destierro(){
+    for(int i=0;i<queueAldeanos.size();i++){
+        delete queueAldeanos[i];
+    }
+    for(int i=0;i<queueEdificios.size();i++){
+        delete queueEdificios[i];
+    }
+    for(int i=0;i<queueTropas.size();i++){
+        delete queueTropas[i];
+    }
+    for(int i=0;i<AldeanosCreados.size();i++){
+        delete AldeanosCreados[i];
+    }
+    for(int i=0;i<EdificiosCreados.size();i++){
+        delete EdificiosCreados[i];
+    }
+    for(int i=0;i<TropasCreadas.size();i++){
+        delete TropasCreadas[i];
+    }
+
     queueAldeanos.clear();
     queueEdificios.clear();
     queueTropas.clear();
@@ -298,6 +324,8 @@ void Civilizacion::destierro(){
     piedra=0;
     oro=0;
     madera=0;
+    pactual=0;
+    pcapacidad=pglobal;
 }
 
 Tropa* Civilizacion::RestarSoldado(){
@@ -405,4 +433,8 @@ Civilizacion::~Civilizacion(){
 
 bool Civilizacion::getCuartel(){
     return cuartel;
+}
+
+bool Civilizacion::getCastillo(){
+    return castillo;
 }

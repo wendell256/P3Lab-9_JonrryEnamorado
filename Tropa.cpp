@@ -14,7 +14,7 @@ void Tropa::setTurno(int tturno){
 
 void Tropa::restarVida(int ataque){
     vida-=ataque;
-    cout<<"TU TROPA HA PERDIDO"<<ataque<<" DE VIDA. Vida restante: ";
+    cout<<"TU TROPA HA PERDIDO "<<ataque<<" DE VIDA. Vida restante: ";
     if (vida>0){
         cout<<vida<<endl;
     } 

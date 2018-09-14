@@ -14,7 +14,7 @@
 #include <vector>
 
 using namespace std;
-/*COSAS PREDETERMINADAS
+/*COSAS PREDETERMINADAS README FIRST
     aldeanos = {alimentacion = 55} recoge = {+50 alimento;+40madera;+30 oro; +20 piedra; turnos = 1}
     soldado = {alimentacion = 90; oro = 25; ataque = 30; defensa = 15; vida = 100; velocidad = 50;turnos =1}
     caballeria = {alimentacion = 110; oro = 60; defensa = 5; vida = 150; velocidad = 85 ;turnos = 2}
@@ -42,7 +42,7 @@ vector<Civilizacion*> Civs;
 vector<Player*> players;
 Player* actual;
 Player* enemy;
-int forzar;
+int forzar,turno=0;
 
 int main(){
     char resp='s';
@@ -66,7 +66,10 @@ int main(){
                 //texto
                 break;
             case 4:
-                ingresar();
+                if(players.size()==0)
+                    cout<<"*ERROR no hay players*";
+                else
+                    ingresar();
                 break;
             case 5:
                 break;
@@ -162,8 +165,11 @@ void ingresar(){
     }
     sel--;
     actual = players[sel];
+    cout<<endl;
     actual->getCivilizacion()->inicio();
+    cout<<endl;
     listEverything(actual->getCivilizacion());
+    cout<<endl;
     while(seguir==0){
         cout<<"Que deseas hacer en este turno?"<<endl<<"1) Nuevo aldeano"<<endl<<"2) Buscar Recursos"<<endl<<"3) Nuevo Edificio"<<endl
             <<"4) Nueva Tropa"<<endl<<"5) Desterrar poblacion"<<endl<<"6) Batalla"<<endl<<"7) Finalizar Turno"<<endl<<"8) Volver a menu principal"<<endl<<"Seleccione una opcion:"<<endl;
@@ -199,7 +205,7 @@ void ingresar(){
                 if(actual->getCivilizacion()->getCuartel()){
                     cout<<"Sexo de nueva tropa:"<<endl;
                     cin>>sex;
-                    cout<<"1) Soldado"<<endl<<"2) Caballeria"<<"3) Guerrero Especial"<<endl<<"Ingrese opcion:"<<endl;
+                    cout<<"1) Soldado"<<endl<<"2) Caballeria"<<endl<<"3) Guerrero Especial"<<endl<<"Ingrese opcion:"<<endl;
                     cin>>opc2;
                     switch(opc2){
                         case 1:
@@ -209,7 +215,12 @@ void ingresar(){
                             actual->getCivilizacion()->crearCaballeria(sex);
                             break;
                         case 3:
-                            actual->getCivilizacion()->crearGuerreroEspecial(sex);
+                            if(actual->getCivilizacion()->getCastillo()){
+                                actual->getCivilizacion()->crearGuerreroEspecial(sex);
+                            }
+                            else{
+                                cout<<"NO TIENES CASTILLO"<<endl;
+                            }
                             break;
                         default:
                             cout<<"ERROR"<<endl;
@@ -236,6 +247,13 @@ void ingresar(){
                 break;
             case 8:
                 forzar=1;
+                cout<<"Finalizando turno..."<<endl;
+                seguir=1;
+                if(recursos){
+                    actual->getCivilizacion()->moreResources();
+                }
+                actual->getCivilizacion()->restarTurno();
+                
                 break;
             default:
             cout<<"ERROR"<<endl;
@@ -263,6 +281,7 @@ void fight(){
         cout<<"ERROR seleccione de nuevo:"<<endl;
         cin>>sel;
     }
+    sel--;
     enemy = players[sel];
     if(actual->getName()==enemy->getName()){
         cout<<"ES UNA GUERRA CIVIL";
@@ -270,30 +289,33 @@ void fight(){
     while(gane<0){
         actualfight=NULL;
         enemyfight=NULL;
-        cout<<actual->getName()<< " selecciona tropa a mandar a batalla: "<<endl;
-        actual->getCivilizacion()->contarTropas();
-        cout<<"1) Soldado"<<endl<<"2) Caballeria"<<"3) Guerrero Especial"<<endl<<"Ingrese opcion:"<<endl;
-        cin>>opc;
-        switch(opc){
-            case 1:
-                actualfight=actual->getCivilizacion()->RestarSoldado();
+        if(actualfight==NULL){
+            cout<<actual->getName()<< " selecciona tropa a mandar a batalla: "<<endl;
+            actual->getCivilizacion()->contarTropas();
+            cout<<"1) Soldado"<<endl<<"2) Caballeria"<<endl<<"3) Guerrero Especial"<<endl<<"Ingrese opcion:"<<endl;
+            cin>>opc;
+            switch(opc){
+                case 1:
+                    actualfight=actual->getCivilizacion()->RestarSoldado();
 
-                break;
-            case 2:
-                actualfight=actual->getCivilizacion()->RestarCaballeria();
-                break;
-            case 3:
-                actualfight=actual->getCivilizacion()->RestarGuerreroEspecial();
-                break;
-            default:
-                cout<<"ERROR"<<endl;
+                    break;
+                case 2:
+                    actualfight=actual->getCivilizacion()->RestarCaballeria();
+                    break;
+                case 3:
+                    actualfight=actual->getCivilizacion()->RestarGuerreroEspecial();
+                    break;
+                default:
+                    cout<<"ERROR"<<endl;
+            }
         }
             if(actualfight != NULL){
-                cout<<enemy->getName()<< " selecciona tropa a mandar a batalla: "<<endl;
-                enemy->getCivilizacion()->contarTropas();
-                cout<<"1) Soldado"<<endl<<"2) Caballeria"<<"3) Guerrero Especial"<<endl<<"Ingrese opcion:"<<endl;
-                cin>>opc;
-                switch(opc){
+                if(enemyfight == NULL){
+                    cout<<enemy->getName()<< " selecciona tropa a mandar a batalla: "<<endl;
+                    enemy->getCivilizacion()->contarTropas();
+                    cout<<"1) Soldado"<<endl<<"2) Caballeria"<<endl<<"3) Guerrero Especial"<<endl<<"Ingrese opcion:"<<endl;
+                    cin>>opc;
+                    switch(opc){
                         case 1:
                             enemyfight=enemy->getCivilizacion()->RestarSoldado();
 
@@ -306,9 +328,10 @@ void fight(){
                             break;
                         default:
                             cout<<"ERROR"<<endl;
+                    }
                 }
                 if(enemyfight != NULL){
-                    cout<<"BATALLA COMIENZA";
+                    cout<<"BATALLA COMIENZA"<<endl;
                     while(actualfight->getVida()>0 && enemyfight->getVida()>0){
                         cout<<enemy->getName()<<": "<<endl<<" ";
                         enemyfight->restarVida(actualfight->ataque(enemyfight->getVida()));
